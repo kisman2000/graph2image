@@ -29,7 +29,7 @@ public class Main {
     }
 
     private static float doQuadFunction(float x) {
-        return round(pow(x, 2);
+        return round(pow(x, 2));
     }
 
     private static float round(float value) {
