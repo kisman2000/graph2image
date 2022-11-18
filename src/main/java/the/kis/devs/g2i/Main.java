@@ -114,8 +114,8 @@ public class Main {
 
                 {
                     if(x > axisOffset + axisWidth && y < height - axisOffset - axisWidth) {
-                        float relativeX = round((x - axisOffset - axisWidth) / coordinateSystemSingleSection);
-                        float relativeY = round((coordinateSystemYLength - (y - axisOffset)) / coordinateSystemSingleSection);
+                        float relativeX = round(((float) x - axisOffset - axisWidth) / coordinateSystemSingleSection);
+                        float relativeY = round((coordinateSystemYLength - ((float) y - axisOffset)) / coordinateSystemSingleSection);
 
                         float linearFunctionRelativeY = doLinearFunction(relativeX, 0.5f, -3);
 
