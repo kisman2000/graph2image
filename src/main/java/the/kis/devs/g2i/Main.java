@@ -29,17 +29,28 @@ public class Main {
     }
 
     private static float doQuadFunction(float x) {
-        return round((float) Math.pow(x, 2));
+        return round(pow(x, 2);
     }
 
     private static float round(float value) {
         return Float.parseFloat(String.format("%.3f", value));
     }
+    
+    private static float pow(float n, float coeff) {
+        return (float) Math.pow(n, coeff);
+    }
+                     
+    private static boolean canBackground(int x, int y, BufferedImage background) {
+        return x <= background.getWidth() && y <= background.getHeight();
+    }
 
     public static void main(String[] args) throws IOException {
-        //TODO: args size check
+        if(args.length < 5 && args.length > 6) {
+            System.out.println("Illegal arguments");
+            return;
+        }
 
-        boolean hasBackground = true;
+        boolean hasBackground = args.length == 6;
 
         int width = Integer.parseInt(args[0]);
         int height = Integer.parseInt(args[1]);
@@ -103,8 +114,8 @@ public class Main {
 
                 {
                     if(x > axisOffset + axisWidth && y < height - axisOffset - axisWidth) {
-                        float relativeX = round((x - axisOffset - axisWidth) / coordinateSystemSingleSection);
-                        float relativeY = round((coordinateSystemYLength - (y - axisOffset)) / coordinateSystemSingleSection);
+                        float relativeX = round(((float) x - axisOffset - axisWidth) / coordinateSystemSingleSection);
+                        float relativeY = round((coordinateSystemYLength - ((float) y - axisOffset)) / coordinateSystemSingleSection);
 
                         float linearFunctionRelativeY = doLinearFunction(relativeX, 0.5f, -3);
 
@@ -129,8 +140,8 @@ public class Main {
                     }
                 }
 
-                //TODO: если бекграунд будет меньше графика то мб исключение будет
-                if(hasBackground) image.setRGB(x, y, background.getRGB(x, y));
+                //Fixed: если бекграунд будет меньше графика то мб исключение будет
+                if(hasBackground && canBackground(x, y, background)) image.setRGB(x, y, background.getRGB(x, y));
                 else image.setRGB(x, y, -1);
             }
         }
