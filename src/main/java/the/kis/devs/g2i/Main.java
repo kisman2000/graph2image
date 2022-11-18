@@ -140,8 +140,8 @@ public class Main {
                     }
                 }
 
-                //TODO: если бекграунд будет меньше графика то мб исключение будет
-                if(hasBackground) image.setRGB(x, y, background.getRGB(x, y));
+                //Fixed: если бекграунд будет меньше графика то мб исключение будет
+                if(hasBackground && canBackground(x, y, background)) image.setRGB(x, y, background.getRGB(x, y));
                 else image.setRGB(x, y, -1);
             }
         }
