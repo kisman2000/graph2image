@@ -12,14 +12,6 @@ import java.util.ArrayList;
  * @since 22:10 of 17.11.2022
  */
 public class Main {
-    private static float doLinearFunction(float x, float a, float b) {
-        return round(x * a + b);
-    }
-
-    private static float doQuadFunction(float x) {
-        return round(pow(x, 2));
-    }
-
     private static float round(float value) {
         return Float.parseFloat(String.format("%.1f", value));
     }
@@ -96,15 +88,10 @@ public class Main {
             background = ImageIO.read(backgroundFile);
         }
 
-        ArrayList<Pair<Integer, Integer>> points2 = new ArrayList<>();
+        ArrayList<Pair<Integer, Integer>> points = new ArrayList<>();
 
         int axisOffset = (int) (10f * scaleCoeff);
         int axisWidth = (int) (5f * scaleCoeff);
-
-        int coordinateSystemZeroX = axisOffset + axisWidth;
-        int coordinateSystemZeroY = height - axisOffset - axisWidth;
-        int coordinateSystemXLength = width - axisOffset * 2 - axisWidth;
-        int coordinateSystemYLength = height - axisOffset * 2 - axisWidth;
         float coordinateSystemSingleSection = 10f;
 
         for(
@@ -118,12 +105,15 @@ public class Main {
                 float relativeX = round(((float) x - axisOffset - axisWidth) / coordinateSystemSingleSection);
                 float relativeNextX = round(((float) nextX - axisOffset - axisWidth) / coordinateSystemSingleSection);
 
-                float quadFunctionRelativeY = doQuadFunction(relativeX);
-                float quadFunctionRelativeNextY = doQuadFunction(relativeNextX);
+                //Its just an example
+                for(Functions function : Functions.values()) {
+                    float functionRelativeY = function.f(relativeX);
+                    float functionRelativeNextY = function.f(relativeNextX);
 
-                ArrayList<Pair<Integer, Integer>> line = line(x, height - axisOffset - axisWidth - (int) (quadFunctionRelativeY * 10f), nextX, height - axisOffset - axisWidth - (int) (quadFunctionRelativeNextY * 10f), false, false);
+                    ArrayList<Pair<Integer, Integer>> line = line(x, height - axisOffset - axisWidth - (int) (functionRelativeY * 10f), nextX, height - axisOffset - axisWidth - (int) (functionRelativeNextY * 10f), false, false);
 
-                points2.addAll(line);
+                    points.addAll(line);
+                }
             }
         }
 
@@ -154,7 +144,7 @@ public class Main {
 
                 {
                     if(x > axisOffset + axisWidth && y < height - axisOffset - axisWidth) {
-                        if(points2.contains(new Pair<>(x, y))) {
+                        if(points.contains(new Pair<>(x, y))) {
                             image.setRGB(x, y, color);
                             continue;
                         }
