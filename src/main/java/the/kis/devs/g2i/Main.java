@@ -39,6 +39,10 @@ public class Main {
     private static float pow(float n, float coeff) {
         return (float) Math.pow(n, coeff);
     }
+                     
+    private static boolean canBackground(int x, int y, BufferedImage background) {
+        return x <= background.getWidth() && y <= background.getHeight();
+    }
 
     public static void main(String[] args) throws IOException {
         if(args.length < 5 && args.length > 6) {
