@@ -41,9 +41,12 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        //TODO: args size check
+        if(args.length < 5 && args.length > 6) {
+            System.out.println("Illegal arguments");
+            return;
+        }
 
-        boolean hasBackground = true;
+        boolean hasBackground = args.length == 6;
 
         int width = Integer.parseInt(args[0]);
         int height = Integer.parseInt(args[1]);
