@@ -29,11 +29,15 @@ public class Main {
     }
 
     private static float doQuadFunction(float x) {
-        return round((float) Math.pow(x, 2));
+        return round(pow(x, 2);
     }
 
     private static float round(float value) {
         return Float.parseFloat(String.format("%.3f", value));
+    }
+    
+    private static float pow(float n, float coeff) {
+        return (float) Math.pow(n, coeff);
     }
 
     public static void main(String[] args) throws IOException {
