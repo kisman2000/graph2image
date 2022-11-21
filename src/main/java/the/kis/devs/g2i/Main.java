@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author _kisman_
@@ -72,6 +73,10 @@ public class Main {
         String output = args[4];
         String backgroundImage = hasBackground ? args[5] : null;
 
+        System.out.println("Initializing font renderer");
+
+        FontRenderer.init();
+
         File file = new File(output);
         File backgroundFile = hasBackground ? new File(backgroundImage) : null;
 
@@ -92,31 +97,54 @@ public class Main {
 
         int axisOffset = (int) (10f * scaleCoeff);
         int axisWidth = (int) (5f * scaleCoeff);
-        float coordinateSystemSingleSection = 10f;
 
-        for(
-                int x = 0, nextX = 0;
-                x < width;
-                x++
-        ) {
-            nextX++;
+        //Processing functions
+        {
+            System.out.println("Processing functions");
 
-            if(x > axisOffset + axisWidth) {
-                float relativeX = round(((float) x - axisOffset - axisWidth) / coordinateSystemSingleSection);
-                float relativeNextX = round(((float) nextX - axisOffset - axisWidth) / coordinateSystemSingleSection);
+            float coordinateSystemSingleSection = 10f;
 
-                //Its just an example
-                for(Functions function : Functions.values()) {
-                    float functionRelativeY = function.f(relativeX);
-                    float functionRelativeNextY = function.f(relativeNextX);
+            for (
+                    int x = 0, nextX = 0;
+                    x < width;
+                    x++
+            ) {
+                nextX++;
 
-                    ArrayList<Pair<Integer, Integer>> line = line(x, height - axisOffset - axisWidth - (int) (functionRelativeY * 10f), nextX, height - axisOffset - axisWidth - (int) (functionRelativeNextY * 10f), false, false);
+                if (x > axisOffset + axisWidth) {
+                    float relativeX = round(((float) x - axisOffset - axisWidth) / coordinateSystemSingleSection);
+                    float relativeNextX = round(((float) nextX - axisOffset - axisWidth) / coordinateSystemSingleSection);
 
-                    points.addAll(line);
+                    //It's just an example
+                    for (Functions function : Functions.values()) {
+                        float functionRelativeY = function.f(relativeX);
+                        float functionRelativeNextY = function.f(relativeNextX);
+
+                        ArrayList<Pair<Integer, Integer>> line = line(x, height - axisOffset - axisWidth - (int) (functionRelativeY * 10f), nextX, height - axisOffset - axisWidth - (int) (functionRelativeNextY * 10f), false, true);
+
+                        points.addAll(line);
+                    }
                 }
             }
         }
 
+        //Processing font renderer
+        {
+            System.out.println("Processing font renderer");
+
+            //Processing 1 usage of drawString method
+            {
+//                ArrayList<Pair<Integer, Integer>> map = FontRenderer.drawString("0NG hello from custom font renderer!!!!");
+
+                points.addAll(FontRenderer.drawString("QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm"));
+
+//                for(int x : map.keySet()) {
+//                    points.add(new Pair<>(x, map.get(x)));
+//                }
+            }
+        }
+
+        System.out.println("Drawing the image");
 
         for(
                 int x = 0;
@@ -143,11 +171,16 @@ public class Main {
                 }
 
                 {
-                    if(x > axisOffset + axisWidth && y < height - axisOffset - axisWidth) {
+                    /*if(x > axisOffset + axisWidth && y < height - axisOffset - axisWidth) {
                         if(points.contains(new Pair<>(x, y))) {
                             image.setRGB(x, y, color);
                             continue;
                         }
+                    }*/
+
+                    if(points.contains(new Pair<>(x, y))) {
+                        image.setRGB(x, y, color);
+                        continue;
                     }
                 }
 
