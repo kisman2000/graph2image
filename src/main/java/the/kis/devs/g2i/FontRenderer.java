@@ -90,13 +90,18 @@ public class FontRenderer {
         ArrayList<Pair<Integer, Integer>> points = new ArrayList<>();
 
         int xOffset = 0;
+        int yOffset = 0;
 
         for(char ch : string.toCharArray()) {
             if(CHAR_MAP.containsKey(ch)) {
                 for(Pair<Integer, Integer> point : CHAR_MAP.get(ch).a) {
-                    points.add(new Pair<>(point.a + xOffset, point.b));
+                    points.add(new Pair<>(point.a + xOffset, point.b + yOffset));
                 }
                 xOffset += (CHAR_MAP.get(ch).b + 2 * CHAR_OFFSET);
+            } else if(ch == '\n') {
+                xOffset = 0;
+                yOffset += CHAR_OFFSET + CHAR_SIZE;
+                        
             }
         }
 

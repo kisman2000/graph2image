@@ -134,13 +134,7 @@ public class Main {
 
             //Processing 1 usage of drawString method
             {
-//                ArrayList<Pair<Integer, Integer>> map = FontRenderer.drawString("0NG hello from custom font renderer!!!!");
-
-                points.addAll(FontRenderer.drawString("QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm"));
-
-//                for(int x : map.keySet()) {
-//                    points.add(new Pair<>(x, map.get(x)));
-//                }
+                points.addAll(FontRenderer.drawString("QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm\nЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮйцукенгшщзхъфывапролджэячсмитьбю"));
             }
         }
 
