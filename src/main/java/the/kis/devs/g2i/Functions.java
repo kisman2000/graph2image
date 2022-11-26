@@ -42,4 +42,8 @@ public enum Functions {
 
     abstract float f(float x, float... args);
     abstract float f(float x);
+
+    float f(float x, FunctionArguments args) {
+        return f(x, args.a, args.b, args.c);
+    }
 }

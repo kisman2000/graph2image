@@ -57,6 +57,91 @@ public class Main {
         return positions;
     }
 
+    public static HashMap<Pair<Integer, Integer>, Integer> points = new HashMap<>();
+    public static int axisOffset;
+    public static int axisWidth;
+    public static int width;
+    public static int height;
+
+    public static void render() {
+        drawString("QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm\nЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮйцукенгшщзхъфывапролджэячсмитьбю", 10, 15, -1, true);
+
+        drawString("пон", 15, 30, -1, false);
+
+        drawLine(30, 30, 60, 70, Color.CYAN.getRGB());
+
+        drawRect(80, 40, 110, 70, Color.GREEN.getRGB(), false, 1);
+
+        drawRect(150, 40, 110, 70, Color.BLUE.getRGB(), true, 1);
+
+        drawFunction(Functions.Square, new FunctionArguments(0, 0, 0), axisOffset + axisWidth, height - axisOffset - axisWidth, 300, 10, Color.ORANGE.getRGB());
+
+        drawFunction(Functions.Linear, new FunctionArguments(1, 0, 0), axisOffset + axisWidth, height - axisOffset - axisWidth, 300, 10, Color.RED.getRGB());
+
+        drawFunction(Functions.Sqrt, new FunctionArguments(0, 0, 0), axisOffset + axisWidth, height - axisOffset - axisWidth, 300, 10, Color.PINK.getRGB());
+    }
+    
+    public static void drawString(String string, int x, int y, int color, boolean shadow) {
+        if(shadow) drawString(string, x + 1, y + 1, new Color(63, 63, 63, 255).getRGB(), false);
+
+        FontRenderer.drawString(string).forEach(point -> {
+            point.a = point.a + x;
+            point.b = point.b + y;
+
+            points.put(point, color);
+        });
+    }
+
+    public static void drawLine(int x1, int y1, int x2, int y2, int color) {
+        line(x1, y1, x2, y2, false, true).forEach(point -> points.put(point, color));
+    }
+
+    public static void drawRect(int x1, int y1, int x2, int y2, int color, boolean filled, int outlineWidth) {
+        for(
+                int x = Math.min(x1, x2);
+                x <= Math.max(x1, x2);
+                x++
+        ) {
+            for(
+                    int y = Math.min(y1, y2);
+                    y <= Math.max(y1, y2);
+                    y++
+            ) {
+                Pair<Integer, Integer> pair = new Pair<>(x, y);
+
+                int relativeX = x - Math.min(x1, x2);
+                int relativeY = y - Math.min(y1, y2);
+
+                int relativeReversedX = Math.max(x1, x2) - x;
+                int relativeReversedY = Math.max(y1, y2) - y;
+
+                if(filled || ((relativeX <= outlineWidth || relativeReversedX <= outlineWidth) || (relativeY <= outlineWidth || relativeReversedY <= outlineWidth))) {
+                    points.put(pair, color);
+                }
+            }
+        }
+    }
+
+    public static void drawFunction(Functions function, FunctionArguments args, int zeroX, int zeroY, int xLimit, int singleSection, int color) {
+        for (
+                int x = 0, nextX = 0;
+                x < xLimit;
+                x++
+        ) {
+            nextX++;
+
+
+            float relativeX = round(x) / singleSection;
+            float relativeNextX = round(nextX) / singleSection;
+
+            float functionRelativeY = round(function.f(relativeX, args));
+            float functionRelativeNextY = round(function.f(relativeNextX, args));
+
+            drawLine(zeroX + x, zeroY - Math.round(functionRelativeY * singleSection), zeroX + nextX, zeroY - Math.round(functionRelativeNextY * singleSection), color);
+        }
+    }
+
+
     public static void main(String[] args) throws IOException {
         if(args.length < 5 || args.length > 6) {
             System.out.println("Illegal arguments");
@@ -65,8 +150,8 @@ public class Main {
 
         boolean hasBackground = args.length == 6;
 
-        int width = Integer.parseInt(args[0]);
-        int height = Integer.parseInt(args[1]);
+        width = Integer.parseInt(args[0]);
+        height = Integer.parseInt(args[1]);
         int color = Integer.parseInt(args[2]);
         float scaleCoeff = Float.parseFloat(args[3]);
 
@@ -76,6 +161,8 @@ public class Main {
         System.out.println("Initializing font renderer");
 
         FontRenderer.init();
+
+        System.out.println("Initializing out and background files");
 
         File file = new File(output);
         File backgroundFile = hasBackground ? new File(backgroundImage) : null;
@@ -93,13 +180,11 @@ public class Main {
             background = ImageIO.read(backgroundFile);
         }
 
-        ArrayList<Pair<Integer, Integer>> points = new ArrayList<>();
-
-        int axisOffset = (int) (10f * scaleCoeff);
-        int axisWidth = (int) (5f * scaleCoeff);
+        axisOffset = (int) (10f * scaleCoeff);
+        axisWidth = (int) (5f * scaleCoeff);
 
         //Processing functions
-        {
+        /*{
             System.out.println("Processing functions");
 
             float coordinateSystemSingleSection = 10f;
@@ -122,21 +207,25 @@ public class Main {
 
                         ArrayList<Pair<Integer, Integer>> line = line(x, height - axisOffset - axisWidth - (int) (functionRelativeY * 10f), nextX, height - axisOffset - axisWidth - (int) (functionRelativeNextY * 10f), false, true);
 
-                        points.addAll(line);
+                        line.forEach(point -> points.put(point, -1));
                     }
                 }
             }
-        }
+        }*/
 
         //Processing font renderer
-        {
+        /*{
             System.out.println("Processing font renderer");
 
             //Processing 1 usage of drawString method
             {
-                points.addAll(FontRenderer.drawString("QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm\nЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮйцукенгшщзхъфывапролджэячсмитьбю"));
+                FontRenderer.drawString("QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm\nЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮйцукенгшщзхъфывапролджэячсмитьбю").forEach(point -> points.put(point, -1));
             }
-        }
+        }*/
+
+        System.out.println("Buffering objects!");
+
+        render();
 
         System.out.println("Drawing the image");
 
@@ -165,15 +254,8 @@ public class Main {
                 }
 
                 {
-                    /*if(x > axisOffset + axisWidth && y < height - axisOffset - axisWidth) {
-                        if(points.contains(new Pair<>(x, y))) {
-                            image.setRGB(x, y, color);
-                            continue;
-                        }
-                    }*/
-
-                    if(points.contains(new Pair<>(x, y))) {
-                        image.setRGB(x, y, color);
+                    if(points.containsKey(new Pair<>(x, y))) {
+                        image.setRGB(x, y, points.get(new Pair<>(x, y)));
                         continue;
                     }
                 }
@@ -183,6 +265,8 @@ public class Main {
                 else image.setRGB(x, y, -1);
             }
         }
+
+        System.out.println("Writing image!");
 
         ImageIO.write(image, "png", file);
     }
