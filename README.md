@@ -8,3 +8,4 @@ with g2i you can:
  - draw rects(filled and not filled)
  - draw points!!!
  - draw graphs(by points)
+ - draw strings(our font renderer supports russian letters too)
