@@ -25,6 +25,60 @@ public class Main {
         return x <= background.getWidth() && y <= background.getHeight();
     }
 
+    private static ArrayList<Pair<Integer, Integer>> line2(int x1, int y1, int x2, int y2, boolean outside, boolean connect) {
+        ArrayList<Pair<Integer, Integer>> positions = new ArrayList<>();
+        double xDiff = Math.abs(x1 - x2);
+        double yDiff = Math.abs(y1 - y2);
+        double d = xDiff > yDiff ? yDiff / xDiff : xDiff / yDiff;
+        double coeff = 0.5;
+
+        int last = (int) Math.round(d * coeff);
+        int xCoeff = x1 - x2 < 0 ? -1 : 1;
+        int yCoeff = y1 - y2 < 0 ? -1 : 1;
+
+        if(xDiff > yDiff) {
+            for(
+                    int i = 0;
+                    i < xDiff;
+                    i++
+            ) {
+                int delta = (int) Math.round(d * coeff);
+
+                if(connect/* && delta > last*/) {
+//                System.out.println(delta);
+                    if(outside) positions.add(new Pair<>(x1 + i * xCoeff + (x2 - x1), y2 + last * yCoeff - (y1 - y2)));
+                    else positions.add(new Pair<>(x1 + i * xCoeff + (x2 - x1), y2 + delta * yCoeff - (y1 - y2)));
+                }
+
+                positions.add(new Pair<>(x1 + i * xCoeff + (x2 - x1), y1 + delta * yCoeff - (y1 - y2)));
+
+                last = delta;
+                coeff += 1;
+            }
+        } else {
+            for(
+                    int i = 0;
+                    i < yDiff;
+                    i++
+            ) {
+                int delta = (int) Math.round(d * coeff);
+
+                if(connect/* && delta > last*/) {
+//                System.out.println(delta + " " + xCoeff + "|" + yCoeff);
+                    if(outside) positions.add(new Pair<>(x1 + last * xCoeff + (x2 - x1), y2 + i * yCoeff - (y1 - y2)));
+                    else positions.add(new Pair<>(x1 + delta * xCoeff + (x2 - x1), y2 + i * yCoeff - (y1 - y2)));
+                }
+
+                positions.add(new Pair<>(x1 + delta * xCoeff + (x2 - x1), y1 + i * yCoeff - (y1 - y2)));
+
+                last = delta;
+                coeff += 1;
+            }
+        }
+
+        return positions;
+    }
+
     private static ArrayList<Pair<Integer, Integer>> line(int x1, int y1, int x2, int y2, boolean connect, boolean outside) {
         ArrayList<Pair<Integer, Integer>> positions = new ArrayList<>();
         double xDiff = x1 - x2;
@@ -34,23 +88,24 @@ public class Main {
         int last = (int) (d * a);
         if(xDiff > zDiff){
             for(int i = 0; i <= ((int) xDiff); i++){
-                double delta = d * a;
+                int delta = (int) Math.round(d * a);
                 if(connect && (int) delta > last){
                     if(outside) positions.add(new Pair<>(x1 + i, y1 + last));
-                    else positions.add(new Pair<>(x1 + i - 1, y1 + (int) delta));
+                    else positions.add(new Pair<>(x1 + i - 1, y1 + delta));
                 }
-                positions.add(new Pair<>(x1 + i, y1 + (int) delta));
-                last = (int) delta;
+                positions.add(new Pair<>(x1 + i, y1 + delta));
+                last = delta;
                 a += 1.0;
             }
         } else {
             for(int i = 0; i <= ((int) zDiff); i++){
-                double delta = d * a;
-                if(connect && (int) delta > last){
+                int delta = (int) Math.round(d * a);
+                if(connect && delta > last){
                     if(outside) positions.add(new Pair<>(x1 + last, y1 + i));
-                    else positions.add(new Pair<>(x1 + y1 + (int) Math.round(delta), i - 1));
+                    else positions.add(new Pair<>(x1 + y1 + delta, i - 1));
                 }
-                positions.add(new Pair<>(x1 + (int) Math.round(delta), y1 + i));
+                positions.add(new Pair<>(x1 + delta, y1 + i));
+                last = delta;
                 a += 1.0;
             }
         }
@@ -68,7 +123,7 @@ public class Main {
 
         drawString("пон", 15, 30, -1, false);
 
-        drawLine(30, 30, 60, 70, Color.CYAN.getRGB());
+//        drawLine(30, 30, 60, 70, Color.CYAN.getRGB());
 
         drawRect(80, 40, 110, 70, Color.GREEN.getRGB(), false, 1);
 
@@ -79,6 +134,49 @@ public class Main {
         drawFunction(Functions.Linear, new FunctionArguments(1, 0, 0), axisOffset + axisWidth, height - axisOffset - axisWidth, 300, 10, Color.RED.getRGB());
 
         drawFunction(Functions.Sqrt, new FunctionArguments(0, 0, 0), axisOffset + axisWidth, height - axisOffset - axisWidth, 300, 10, Color.PINK.getRGB());
+
+        drawGraph(
+                new int[][] {
+                        {10, 0},
+                        {11, 1},
+                        {13, 4},
+                        {15, 6},
+                        {20, 6}//,
+//                        {200, 81}
+                },
+                axisOffset + axisWidth, height - axisOffset - axisWidth, 10, Color.GRAY.getRGB()
+        );
+
+        drawLine2(30, 30, 60, 70, Color.CYAN.getRGB());
+        drawLine2(30, 100, 200, 100, Color.CYAN.getRGB());
+
+    }
+
+    public static void drawGraph(int[][] points, int zeroX, int zeroY, int singleSection, int color) {
+        for(
+                int i = 0;
+                i < points.length;
+                i++
+        ) {
+            int x = points[i][0];
+            int y = points[i][1];
+
+            int nextX = i + 1 != points.length ? points[i + 1][0] : x;
+            int nextY = i + 1 != points.length ? points[i + 1][1] : y;
+
+//            System.out.println("\n" + x + "|" + y + " " + nextX + "|" + nextY);
+//            System.out.println((zeroX + Math.round(x * singleSection)) + "|" + (zeroY - Math.round(y * singleSection)) + " " + (zeroX + Math.round(nextX * singleSection)) + "|" + (zeroY - Math.round(nextY * singleSection)));
+
+
+            drawLine2(zeroX + Math.round(x * singleSection), zeroY - Math.round(y * singleSection), zeroX + Math.round(nextX * singleSection), zeroY - Math.round(nextY * singleSection), color);
+//            drawLine(zeroX + Math.round(nextX * singleSection), zeroY - Math.round(nextY * singleSection), zeroX + Math.round(x * singleSection), zeroY - Math.round(y * singleSection), color);
+
+//            drawPoint(zeroX + Math.round(x * singleSection), zeroY - Math.round(y * singleSection), -1);
+        }
+    }
+
+    public static void drawPoint(int x, int y, int color) {
+        points.put(new Pair<>(x, y), color);
     }
     
     public static void drawString(String string, int x, int y, int color, boolean shadow) {
@@ -93,7 +191,11 @@ public class Main {
     }
 
     public static void drawLine(int x1, int y1, int x2, int y2, int color) {
-        line(x1, y1, x2, y2, false, true).forEach(point -> points.put(point, color));
+        line(x1, y1, x2, y2, true, false).forEach(point -> points.put(point, color));
+    }
+
+    public static void drawLine2(int x1, int y1, int x2, int y2, int color) {
+        line2(x1, y1, x2, y2, false, false).forEach(point -> points.put(point, color));
     }
 
     public static void drawRect(int x1, int y1, int x2, int y2, int color, boolean filled, int outlineWidth) {
@@ -182,46 +284,6 @@ public class Main {
 
         axisOffset = (int) (10f * scaleCoeff);
         axisWidth = (int) (5f * scaleCoeff);
-
-        //Processing functions
-        /*{
-            System.out.println("Processing functions");
-
-            float coordinateSystemSingleSection = 10f;
-
-            for (
-                    int x = 0, nextX = 0;
-                    x < width;
-                    x++
-            ) {
-                nextX++;
-
-                if (x > axisOffset + axisWidth) {
-                    float relativeX = round(((float) x - axisOffset - axisWidth) / coordinateSystemSingleSection);
-                    float relativeNextX = round(((float) nextX - axisOffset - axisWidth) / coordinateSystemSingleSection);
-
-                    //It's just an example
-                    for (Functions function : Functions.values()) {
-                        float functionRelativeY = function.f(relativeX);
-                        float functionRelativeNextY = function.f(relativeNextX);
-
-                        ArrayList<Pair<Integer, Integer>> line = line(x, height - axisOffset - axisWidth - (int) (functionRelativeY * 10f), nextX, height - axisOffset - axisWidth - (int) (functionRelativeNextY * 10f), false, true);
-
-                        line.forEach(point -> points.put(point, -1));
-                    }
-                }
-            }
-        }*/
-
-        //Processing font renderer
-        /*{
-            System.out.println("Processing font renderer");
-
-            //Processing 1 usage of drawString method
-            {
-                FontRenderer.drawString("QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm\nЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮйцукенгшщзхъфывапролджэячсмитьбю").forEach(point -> points.put(point, -1));
-            }
-        }*/
 
         System.out.println("Buffering objects!");
 
