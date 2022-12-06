@@ -42,12 +42,12 @@ public enum Functions {
     Cattyn {
         @Override
         float f(float x, float... args) {
-            return /*MathHelper.clamp*/(float) ((1 - (.5 * Math.sin(Math.PI * x + Math.PI / 2) + .5)/*, args[0], args[1]*/) * args[0]);
+            return /*MathHelper.clamp*/(float) ((1 - (.5 * Math.sin(Math.PI * (x / args[1]) + Math.PI / 2) + .5)/*, args[0], args[1]*/) * args[0]);
         }
 
         @Override
         float f(float x) {
-            return f(x, 1);
+            return f(x, 1, 1);
         }
     }
     ;

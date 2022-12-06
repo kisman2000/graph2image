@@ -127,8 +127,8 @@ public class Main {
 
         drawRect(150, 40, 110, 70, Color.BLUE.getRGB(), true, 1);
 
-        drawFunction(Functions.Cattyn, new FunctionArguments(10, 0, 0), axisOffset + axisWidth, height - axisOffset - axisWidth, 300, 10, Color.MAGENTA.getRGB());
-        drawFunction(Functions.Cattyn, new FunctionArguments(1, 0, 0), axisOffset + axisWidth, height - axisOffset - axisWidth - 100, 300, 10, Color.PINK.getRGB());
+        drawFunction(Functions.Cattyn, new FunctionArguments(10, 10, 0), axisOffset + axisWidth, height - axisOffset - axisWidth, 300, 10, Color.MAGENTA.getRGB());
+        drawFunction(Functions.Cattyn, new FunctionArguments(1, 1, 0), axisOffset + axisWidth, height - axisOffset - axisWidth - 100, 300, 10, Color.PINK.getRGB());
 
         drawFunction(Functions.Square, new FunctionArguments(0, 0, 0), axisOffset + axisWidth, height - axisOffset - axisWidth, 300, 10, Color.ORANGE.getRGB());
 
