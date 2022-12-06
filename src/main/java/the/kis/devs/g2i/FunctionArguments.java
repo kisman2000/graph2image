@@ -14,4 +14,10 @@ public class FunctionArguments {
         this.b = b;
         this.c = c;
     }
+
+    public FunctionArguments(float a, float b) {
+        this.a = a;
+        this.b = b;
+        this.c = Float.NaN;
+    }
 }
