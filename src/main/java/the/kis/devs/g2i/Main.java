@@ -27,6 +27,8 @@ public class Main {
 
     private static ArrayList<Pair<Integer, Integer>> line2(int x1, int y1, int x2, int y2, boolean outside, boolean connect) {
         ArrayList<Pair<Integer, Integer>> positions = new ArrayList<>();
+        positions.add(new Pair<>(x1, y1));
+        positions.add(new Pair<>(x2, y2));
         double xDiff = Math.abs(x1 - x2);
         double yDiff = Math.abs(y1 - y2);
         double d = xDiff > yDiff ? yDiff / xDiff : xDiff / yDiff;
@@ -124,6 +126,8 @@ public class Main {
         drawRect(80, 40, 110, 70, Color.GREEN.getRGB(), false, 1);
 
         drawRect(150, 40, 110, 70, Color.BLUE.getRGB(), true, 1);
+
+        drawFunction(Functions.Cattyn, new FunctionArguments(10, 0, 0), axisOffset + axisWidth, height - axisOffset - axisWidth, 300, 10, Color.MAGENTA.getRGB());
 
         drawFunction(Functions.Square, new FunctionArguments(0, 0, 0), axisOffset + axisWidth, height - axisOffset - axisWidth, 300, 10, Color.ORANGE.getRGB());
 
@@ -269,7 +273,7 @@ public class Main {
             float functionRelativeY = round(function.f(relativeX, args));
             float functionRelativeNextY = round(function.f(relativeNextX, args));
 
-            drawLine(zeroX + x, zeroY - Math.round(functionRelativeY * singleSection), zeroX + nextX, zeroY - Math.round(functionRelativeNextY * singleSection), color);
+            drawLine2(zeroX + x, zeroY - Math.round(functionRelativeY * singleSection), zeroX + nextX, zeroY - Math.round(functionRelativeNextY * singleSection), color);
         }
     }
 

@@ -37,6 +37,18 @@ public enum Functions {
         float f(float x) {
             return f(x, 0, 0);
         }
+    },
+
+    Cattyn {
+        @Override
+        float f(float x, float... args) {
+            return /*MathHelper.clamp*/(float) ((1 - (.5 * Math.sin(Math.PI * x + Math.PI / 2) + .5)/*, args[0], args[1]*/) * args[0]);
+        }
+
+        @Override
+        float f(float x) {
+            return f(x, 1);
+        }
     }
     ;
 
