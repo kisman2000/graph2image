@@ -44,8 +44,7 @@ public class Main {
             ) {
                 int delta = (int) Math.round(d * coeff);
 
-                if(connect/* && delta > last*/) {
-//                System.out.println(delta);
+                if(connect) {
                     if(outside) positions.add(new Pair<>(x1 + i * xCoeff + (x2 - x1), y2 + last * yCoeff - (y1 - y2)));
                     else positions.add(new Pair<>(x1 + i * xCoeff + (x2 - x1), y2 + delta * yCoeff - (y1 - y2)));
                 }
@@ -63,8 +62,7 @@ public class Main {
             ) {
                 int delta = (int) Math.round(d * coeff);
 
-                if(connect/* && delta > last*/) {
-//                System.out.println(delta + " " + xCoeff + "|" + yCoeff);
+                if(connect) {
                     if(outside) positions.add(new Pair<>(x1 + last * xCoeff + (x2 - x1), y2 + i * yCoeff - (y1 - y2)));
                     else positions.add(new Pair<>(x1 + delta * xCoeff + (x2 - x1), y2 + i * yCoeff - (y1 - y2)));
                 }
@@ -119,11 +117,9 @@ public class Main {
     public static int height;
 
     public static void render() {
-        drawString("QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm\nЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮйцукенгшщзхъфывапролджэячсмитьбю", 10, 15, -1, true);
+        drawString("QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm\nЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮйцукенгшщзхъфывапролджэячсмитьбю", 50, 15, -1, true);
 
-        drawString("пон", 15, 30, -1, false);
-
-//        drawLine(30, 30, 60, 70, Color.CYAN.getRGB());
+        drawString("пон", 50, 30, -1, false);
 
         drawRect(80, 40, 110, 70, Color.GREEN.getRGB(), false, 1);
 
@@ -141,14 +137,55 @@ public class Main {
                         {11, 1},
                         {13, 4},
                         {15, 6},
-                        {20, 6}//,
-//                        {200, 81}
+                        {20, 6}
                 },
                 axisOffset + axisWidth, height - axisOffset - axisWidth, 10, Color.GRAY.getRGB()
         );
 
         drawLine2(30, 30, 60, 70, Color.CYAN.getRGB());
         drawLine2(30, 100, 200, 100, Color.CYAN.getRGB());
+
+        //Buffering sections of axis
+        {
+            int singleSection = 10;
+
+            //X axis
+            {
+                int axisLength = width - axisOffset * 2 - axisWidth;
+
+                for (
+                        int i = 0;
+                        i <= axisLength;
+                        i++
+                ) {
+                    int section = i * singleSection;
+                    int x = axisOffset + axisWidth + section;
+
+                    drawString(String.valueOf(i), x - FontRenderer.getWidth(String.valueOf(i)) / 2, height - axisOffset + 1 - (i % 2 == 0 ? 0 : /*-1 + */axisWidth + FontRenderer.CHAR_SIZE), Color.BLACK.getRGB(), false);
+                    drawLine2(x, height - axisOffset - axisWidth - 1, x, height - axisOffset, Color.BLACK.getRGB());
+                }
+            }
+
+            //Y axis
+            {
+                int axisLength = height - axisOffset * 2 - axisWidth;
+
+                for (
+                        int i = 0;
+                        i <= axisLength;
+                        i++
+                ) {
+                    int section = i * singleSection;
+                    int y = height - axisOffset - axisWidth - section;//axisOffset + axisWidth + section;
+
+                    drawString(String.valueOf(i), axisOffset + (i % 2 == 0 ? -FontRenderer.getWidth(String.valueOf(i)) : axisWidth + FontRenderer.getWidth(String.valueOf(i)) + 1) - 1, y - FontRenderer.CHAR_SIZE / 2, Color.BLACK.getRGB(), false);
+                    drawLine2(axisOffset - 1, y, axisOffset + axisWidth + 1, y, Color.BLACK.getRGB());
+
+//                    drawString(String.valueOf(i), x - FontRenderer.getWidth(String.valueOf(i)) / 2, height - axisOffset + 1 - (i % 2 == 0 ? 0 : /*-1 + */axisWidth + FontRenderer.CHAR_SIZE), Color.BLACK.getRGB(), false);
+//                    drawLine2(x, height - axisOffset - axisWidth - 1, x, height - axisOffset, Color.BLACK.getRGB());
+                }
+            }
+        }
 
     }
 
@@ -164,14 +201,7 @@ public class Main {
             int nextX = i + 1 != points.length ? points[i + 1][0] : x;
             int nextY = i + 1 != points.length ? points[i + 1][1] : y;
 
-//            System.out.println("\n" + x + "|" + y + " " + nextX + "|" + nextY);
-//            System.out.println((zeroX + Math.round(x * singleSection)) + "|" + (zeroY - Math.round(y * singleSection)) + " " + (zeroX + Math.round(nextX * singleSection)) + "|" + (zeroY - Math.round(nextY * singleSection)));
-
-
             drawLine2(zeroX + Math.round(x * singleSection), zeroY - Math.round(y * singleSection), zeroX + Math.round(nextX * singleSection), zeroY - Math.round(nextY * singleSection), color);
-//            drawLine(zeroX + Math.round(nextX * singleSection), zeroY - Math.round(nextY * singleSection), zeroX + Math.round(x * singleSection), zeroY - Math.round(y * singleSection), color);
-
-//            drawPoint(zeroX + Math.round(x * singleSection), zeroY - Math.round(y * singleSection), -1);
         }
     }
 

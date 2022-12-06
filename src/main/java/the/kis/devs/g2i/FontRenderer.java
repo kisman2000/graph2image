@@ -19,8 +19,9 @@ public class FontRenderer {
     private static final String TEXTURE = "/font.png";
     private static final int TEXTURE_SIZE = 128;
 
-    private static final int CHAR_SIZE = 8;
+    public static final int CHAR_SIZE = 8;
     private static final int CHAR_OFFSET = 1;
+    private static final int CHAR_MAX_WIDTH = 5;//точное только для цифр и букв да пон
     private static final char[][] CHARS_MAP = new char[][] {
             { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
             { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
@@ -61,10 +62,12 @@ public class FontRenderer {
                     int charWidth = currentChar == ' ' ? CHAR_SIZE - 2 : 0;
 
                     for (
-                            int charX = 0;
+                            int charX = 0;//, relativeCharX = 0;
                             charX < CHAR_SIZE;
                             charX++
                     ) {
+//                        boolean flag = false;
+
                         for (
                                 int charY = 0;
                                 charY < CHAR_SIZE;
@@ -73,17 +76,35 @@ public class FontRenderer {
                             if (image.getRGB(x + charX, y + charY) == -1) {
                                 pixels.add(new Pair<>(charX, charY));
 
-                                if(charX > charWidth) {
-                                    charWidth = charX + 1;
+//                                if(!flag) {
+//                                    relativeCharX++;
+//                                }
+
+                                if(/*relativeCharX*/charX > charWidth) {
+                                    charWidth = charX + 1/*relativeCharX*/;
+//                                    charWidth += 1;
+//                                    flag = true;
                                 }
                             }
                         }
                     }
 
-                    CHAR_MAP.put(currentChar, new Pair<>(pixels, charWidth));
+                    CHAR_MAP.put(currentChar, new Pair<>(pixels, Math.max(CHAR_MAX_WIDTH, charWidth)));
                 }
             }
         }
+    }
+
+    public static int getWidth(String string) {
+        int width = 0;
+
+        for(char ch : string.toCharArray()) {
+            if(CHAR_MAP.containsKey(ch)) {
+                width += CHAR_MAP.get(ch).b + CHAR_OFFSET;
+            }
+        }
+
+        return width - CHAR_OFFSET;
     }
 
     public static ArrayList<Pair<Integer, Integer>> drawString(String string) {
@@ -97,7 +118,7 @@ public class FontRenderer {
                 for(Pair<Integer, Integer> point : CHAR_MAP.get(ch).a) {
                     points.add(new Pair<>(point.a + xOffset, point.b + yOffset));
                 }
-                xOffset += (CHAR_MAP.get(ch).b + 2 * CHAR_OFFSET);
+                xOffset += (CHAR_MAP.get(ch).b + /*2 * */CHAR_OFFSET);
             } else if(ch == '\n') {
                 xOffset = 0;
                 yOffset += CHAR_OFFSET + CHAR_SIZE;
