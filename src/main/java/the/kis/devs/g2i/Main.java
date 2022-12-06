@@ -128,6 +128,7 @@ public class Main {
         drawRect(150, 40, 110, 70, Color.BLUE.getRGB(), true, 1);
 
         drawFunction(Functions.Cattyn, new FunctionArguments(10, 0, 0), axisOffset + axisWidth, height - axisOffset - axisWidth, 300, 10, Color.MAGENTA.getRGB());
+        drawFunction(Functions.Cattyn, new FunctionArguments(1, 0, 0), axisOffset + axisWidth, height - axisOffset - axisWidth - 100, 300, 10, Color.PINK.getRGB());
 
         drawFunction(Functions.Square, new FunctionArguments(0, 0, 0), axisOffset + axisWidth, height - axisOffset - axisWidth, 300, 10, Color.ORANGE.getRGB());
 
@@ -184,9 +185,6 @@ public class Main {
 
                     drawString(String.valueOf(i), axisOffset + (i % 2 == 0 ? -FontRenderer.getWidth(String.valueOf(i)) : axisWidth + FontRenderer.getWidth(String.valueOf(i)) + 1) - 1, y - FontRenderer.CHAR_SIZE / 2, Color.BLACK.getRGB(), false);
                     drawLine2(axisOffset - 1, y, axisOffset + axisWidth + 1, y, Color.BLACK.getRGB());
-
-//                    drawString(String.valueOf(i), x - FontRenderer.getWidth(String.valueOf(i)) / 2, height - axisOffset + 1 - (i % 2 == 0 ? 0 : /*-1 + */axisWidth + FontRenderer.CHAR_SIZE), Color.BLACK.getRGB(), false);
-//                    drawLine2(x, height - axisOffset - axisWidth - 1, x, height - axisOffset, Color.BLACK.getRGB());
                 }
             }
         }
