@@ -77,10 +77,9 @@ public class Main {
         return positions;
     }
 
-    private static ArrayList<Pair<Integer, Integer>> line3(int x1, int y1, int x2, int y2, int zeroY) {
+    private static ArrayList<Pair<Integer, Integer>> line3(int x1, int y1, int x2, int y2) {
         ArrayList<Pair<Integer, Integer>> positions = new ArrayList<>();
         FunctionArguments args = FunctionHelper.getLinearArguments(Math.min(x1, x2), Math.min(y1, y2), Math.max(x1, x2), Math.max(y1, y2));
-//        args.b = 0;
 
         System.out.println("\n> " + args.a + " " + args.b + " | " + x1 + " " + y1 + " | " + x2 + " " + y2);
 
@@ -90,53 +89,22 @@ public class Main {
                 relativeFunctionX += 0.1
         ) {
             float functionX = x1 + relativeFunctionX;
+
             float functionY = Functions.Linear.f(functionX, args);
 
-            int x3 = Math.round(round(functionX)) + (x1 - x2) /*-*/ /*x1*//* -*/ /*(x1 - (axisOffset + axisWidth)) + x1*/ /*+ (*//*Math.round(round(functionX)) + *//*(x1 - (axisOffset + axisWidth)))*/;
+            int x3 = Math.round(round(functionX)) + (x1 - x2);
             int x = x3 < x1 ? x3 + Math.abs(x1 - x2) * 2 : x3;
 
-            System.out.println(functionX + "(" + (x) + ")" + " | " + functionY + "(" + (y1 - y2 > 0 ? -1 : 1) * (/*zeroY - */(/*height -*//*axisOffset + axisWidth + */Math.round(round(functionY)))) + ")");
+            //TODO: i will need it to fix one little bug
+//            System.out.println(functionX + "(" + (x) + ")" + " | " + functionY + "(" + (y1 - y2 > 0 ? -1 : 1) * (/*zeroY - */(/*height -*//*axisOffset + axisWidth + */Math.round(round(functionY)))) + ")");
 
-            positions.add(new Pair<>(x, /*zeroY -*/+ (y1 - y2 > 0 ? -1 : 1) * (/*height -*//*axisOffset + axisWidth + */-Math.round(round(functionY)))));
+            positions.add(new Pair<>(x, (y1 - y2 > 0 ? -1 : 1) * -Math.round(round(functionY))));
 
         }
 
         positions.add(new Pair<>(x1, y1));
         positions.add(new Pair<>(x2, y2));
 
-        return positions;
-    }
-
-    private static ArrayList<Pair<Integer, Integer>> line(int x1, int y1, int x2, int y2, boolean connect, boolean outside) {
-        ArrayList<Pair<Integer, Integer>> positions = new ArrayList<>();
-        double xDiff = x1 - x2;
-        double zDiff = y1 - y2;
-        double d = xDiff > zDiff ? zDiff / xDiff : xDiff / zDiff;
-        double a = 0.5;
-        int last = (int) (d * a);
-        if(xDiff > zDiff){
-            for(int i = 0; i <= ((int) xDiff); i++){
-                int delta = (int) Math.round(d * a);
-                if(connect && (int) delta > last){
-                    if(outside) positions.add(new Pair<>(x1 + i, y1 + last));
-                    else positions.add(new Pair<>(x1 + i - 1, y1 + delta));
-                }
-                positions.add(new Pair<>(x1 + i, y1 + delta));
-                last = delta;
-                a += 1.0;
-            }
-        } else {
-            for(int i = 0; i <= ((int) zDiff); i++){
-                int delta = (int) Math.round(d * a);
-                if(connect && delta > last){
-                    if(outside) positions.add(new Pair<>(x1 + last, y1 + i));
-                    else positions.add(new Pair<>(x1 + y1 + delta, i - 1));
-                }
-                positions.add(new Pair<>(x1 + delta, y1 + i));
-                last = delta;
-                a += 1.0;
-            }
-        }
         return positions;
     }
 
@@ -251,16 +219,12 @@ public class Main {
         });
     }
 
-    public static void drawLine(int x1, int y1, int x2, int y2, int color) {
-        line(x1, y1, x2, y2, true, false).forEach(point -> points.put(point, color));
-    }
-
     public static void drawLine2(int x1, int y1, int x2, int y2, int color) {
         line2(x1, y1, x2, y2, true).forEach(point -> points.put(point, color));
     }
 
     public static void drawLine3(int x1, int y1, int x2, int y2, int color) {
-        line3(x1, y1, x2, y2, height - axisOffset - axisWidth).forEach(point -> points.put(point, color));
+        line3(x1, y1, x2, y2).forEach(point -> points.put(point, color));
     }
 
     public static void drawRect(int x1, int y1, int x2, int y2, int color, boolean filled, int outlineWidth) {
