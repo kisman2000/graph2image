@@ -81,7 +81,8 @@ public class Main {
         ArrayList<Pair<Integer, Integer>> positions = new ArrayList<>();
         FunctionArguments args = FunctionHelper.getLinearArguments(Math.min(x1, x2), Math.min(y1, y2), Math.max(x1, x2), Math.max(y1, y2));
 
-        System.out.println("\n> " + args.a + " " + args.b + " | " + x1 + " " + y1 + " | " + x2 + " " + y2);
+        //TODO: i will need it to fix one little bug
+//        System.out.println("\n> " + args.a + " " + args.b + " | " + x1 + " " + y1 + " | " + x2 + " " + y2);
 
         for(
                 float relativeFunctionX = 0;

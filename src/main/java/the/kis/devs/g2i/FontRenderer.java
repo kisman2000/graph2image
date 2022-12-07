@@ -1,12 +1,8 @@
 package the.kis.devs.g2i;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -62,12 +58,10 @@ public class FontRenderer {
                     int charWidth = currentChar == ' ' ? CHAR_SIZE - 2 : 0;
 
                     for (
-                            int charX = 0;//, relativeCharX = 0;
+                            int charX = 0;
                             charX < CHAR_SIZE;
                             charX++
                     ) {
-//                        boolean flag = false;
-
                         for (
                                 int charY = 0;
                                 charY < CHAR_SIZE;
@@ -76,14 +70,8 @@ public class FontRenderer {
                             if (image.getRGB(x + charX, y + charY) == -1) {
                                 pixels.add(new Pair<>(charX, charY));
 
-//                                if(!flag) {
-//                                    relativeCharX++;
-//                                }
-
-                                if(/*relativeCharX*/charX > charWidth) {
-                                    charWidth = charX + 1/*relativeCharX*/;
-//                                    charWidth += 1;
-//                                    flag = true;
+                                if(charX > charWidth) {
+                                    charWidth = charX + 1;
                                 }
                             }
                         }
@@ -118,7 +106,7 @@ public class FontRenderer {
                 for(Pair<Integer, Integer> point : CHAR_MAP.get(ch).a) {
                     points.add(new Pair<>(point.a + xOffset, point.b + yOffset));
                 }
-                xOffset += (CHAR_MAP.get(ch).b + /*2 * */CHAR_OFFSET);
+                xOffset += (CHAR_MAP.get(ch).b + CHAR_OFFSET);
             } else if(ch == '\n') {
                 xOffset = 0;
                 yOffset += CHAR_OFFSET + CHAR_SIZE;
