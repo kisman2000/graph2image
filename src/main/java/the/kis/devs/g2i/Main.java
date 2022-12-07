@@ -25,16 +25,20 @@ public class Main {
         return x <= background.getWidth() && y <= background.getHeight();
     }
 
-    private static ArrayList<Pair<Integer, Integer>> line2(int x1, int y1, int x2, int y2, boolean outside, boolean connect) {
+    public static void clear(ArrayList<Pair<Integer, Integer>> positions, int xCoeff, int yCoeff, double diff, boolean connect) {
+        //TODO: типо после этого график красивый будет
+    }
+
+    private static ArrayList<Pair<Integer, Integer>> line2(int x1, int y1, int x2, int y2, boolean outside) {
         ArrayList<Pair<Integer, Integer>> positions = new ArrayList<>();
         positions.add(new Pair<>(x1, y1));
         positions.add(new Pair<>(x2, y2));
         double xDiff = Math.abs(x1 - x2);
         double yDiff = Math.abs(y1 - y2);
-        double d = xDiff > yDiff ? yDiff / xDiff : xDiff / yDiff;
+        double diff = xDiff > yDiff ? yDiff / xDiff : xDiff / yDiff;
         double coeff = 0.5;
 
-        int last = (int) Math.round(d * coeff);
+        int last = (int) Math.round(diff * coeff);
         int xCoeff = x1 - x2 < 0 ? -1 : 1;
         int yCoeff = y1 - y2 < 0 ? -1 : 1;
 
@@ -44,14 +48,10 @@ public class Main {
                     i < xDiff;
                     i++
             ) {
-                int delta = (int) Math.round(d * coeff);
+                int delta = (int) Math.round(diff * coeff);
 
-                if(connect) {
-                    if(outside) positions.add(new Pair<>(x1 + i * xCoeff + (x2 - x1), y2 + last * yCoeff - (y1 - y2)));
-                    else positions.add(new Pair<>(x1 + i * xCoeff + (x2 - x1), y2 + delta * yCoeff - (y1 - y2)));
-                }
-
-                positions.add(new Pair<>(x1 + i * xCoeff + (x2 - x1), y1 + delta * yCoeff - (y1 - y2)));
+                if(outside) positions.add(new Pair<>(x1 + i * xCoeff + (x2 - x1), y1 + last * yCoeff - (y1 - y2)));
+                else positions.add(new Pair<>(x1 + i * xCoeff + (x2 - x1), y1 + delta * yCoeff - (y1 - y2)));
 
                 last = delta;
                 coeff += 1;
@@ -62,19 +62,47 @@ public class Main {
                     i < yDiff;
                     i++
             ) {
-                int delta = (int) Math.round(d * coeff);
+                int delta = (int) Math.round(diff * coeff);
 
-                if(connect) {
-                    if(outside) positions.add(new Pair<>(x1 + last * xCoeff + (x2 - x1), y2 + i * yCoeff - (y1 - y2)));
-                    else positions.add(new Pair<>(x1 + delta * xCoeff + (x2 - x1), y2 + i * yCoeff - (y1 - y2)));
-                }
-
-                positions.add(new Pair<>(x1 + delta * xCoeff + (x2 - x1), y1 + i * yCoeff - (y1 - y2)));
+                if(outside) positions.add(new Pair<>(x1 + last * xCoeff + (x2 - x1), y1 + i * yCoeff - (y1 - y2)));
+                else positions.add(new Pair<>(x1 + delta * xCoeff + (x2 - x1), y1 + i * yCoeff - (y1 - y2)));
 
                 last = delta;
                 coeff += 1;
             }
         }
+
+        clear(positions, xCoeff, yCoeff, diff, outside);
+
+        return positions;
+    }
+
+    private static ArrayList<Pair<Integer, Integer>> line3(int x1, int y1, int x2, int y2, int zeroY) {
+        ArrayList<Pair<Integer, Integer>> positions = new ArrayList<>();
+        FunctionArguments args = FunctionHelper.getLinearArguments(Math.min(x1, x2), Math.min(y1, y2), Math.max(x1, x2), Math.max(y1, y2));
+//        args.b = 0;
+
+        System.out.println("\n> " + args.a + " " + args.b + " | " + x1 + " " + y1 + " | " + x2 + " " + y2);
+
+        for(
+                float relativeFunctionX = 0;
+                relativeFunctionX <= Math.abs(x1 - x2);
+                relativeFunctionX += 0.1
+        ) {
+            float functionX = x1 + relativeFunctionX;
+            float functionY = Functions.Linear.f(functionX, args);
+
+            int x3 = Math.round(round(functionX)) + (x1 - x2) /*-*/ /*x1*//* -*/ /*(x1 - (axisOffset + axisWidth)) + x1*/ /*+ (*//*Math.round(round(functionX)) + *//*(x1 - (axisOffset + axisWidth)))*/;
+            int x = x3 < x1 ? x3 + Math.abs(x1 - x2) * 2 : x3;
+
+            System.out.println(functionX + "(" + (x) + ")" + " | " + functionY + "(" + (y1 - y2 > 0 ? -1 : 1) * (/*zeroY - */(/*height -*//*axisOffset + axisWidth + */Math.round(round(functionY)))) + ")");
+
+            positions.add(new Pair<>(x, /*zeroY -*/+ (y1 - y2 > 0 ? -1 : 1) * (/*height -*//*axisOffset + axisWidth + */-Math.round(round(functionY)))));
+
+        }
+
+        positions.add(new Pair<>(x1, y1));
+        positions.add(new Pair<>(x2, y2));
 
         return positions;
     }
@@ -127,12 +155,13 @@ public class Main {
 
         drawRect(150, 40, 110, 70, Color.BLUE.getRGB(), true, 1);
 
+        drawFunction(Functions.Square, new FunctionArguments(0, 0, 0), axisOffset + axisWidth, height - axisOffset - axisWidth, 300, 10, Color.ORANGE.getRGB());
+
         drawFunction(Functions.Cattyn, new FunctionArguments(10, 10, 0), axisOffset + axisWidth, height - axisOffset - axisWidth, 300, 10, Color.MAGENTA.getRGB());
         drawFunction(Functions.Cattyn, new FunctionArguments(1, 1, 0), axisOffset + axisWidth, height - axisOffset - axisWidth - 100, 300, 10, Color.PINK.getRGB());
 
-        drawFunction(Functions.Square, new FunctionArguments(0, 0, 0), axisOffset + axisWidth, height - axisOffset - axisWidth, 300, 10, Color.ORANGE.getRGB());
-
         drawFunction(Functions.Linear, new FunctionArguments(1, 0, 0), axisOffset + axisWidth, height - axisOffset - axisWidth, 300, 10, Color.RED.getRGB());
+        drawFunction(Functions.Linear, new FunctionArguments(0.3f, 0, 0), axisOffset + axisWidth, height - axisOffset - axisWidth, 300, 10, Color.RED.getRGB());
 
         drawFunction(Functions.Sqrt, new FunctionArguments(0, 0, 0), axisOffset + axisWidth, height - axisOffset - axisWidth, 300, 10, Color.PINK.getRGB());
 
@@ -203,7 +232,7 @@ public class Main {
             int nextX = i + 1 != points.length ? points[i + 1][0] : x;
             int nextY = i + 1 != points.length ? points[i + 1][1] : y;
 
-            drawLine2(zeroX + Math.round(x * singleSection), zeroY - Math.round(y * singleSection), zeroX + Math.round(nextX * singleSection), zeroY - Math.round(nextY * singleSection), color);
+            drawLine3(zeroX + Math.round(x * singleSection), zeroY - Math.round(y * singleSection), zeroX + Math.round(nextX * singleSection), zeroY - Math.round(nextY * singleSection), color);
         }
     }
 
@@ -227,7 +256,11 @@ public class Main {
     }
 
     public static void drawLine2(int x1, int y1, int x2, int y2, int color) {
-        line2(x1, y1, x2, y2, false, false).forEach(point -> points.put(point, color));
+        line2(x1, y1, x2, y2, true).forEach(point -> points.put(point, color));
+    }
+
+    public static void drawLine3(int x1, int y1, int x2, int y2, int color) {
+        line3(x1, y1, x2, y2, height - axisOffset - axisWidth).forEach(point -> points.put(point, color));
     }
 
     public static void drawRect(int x1, int y1, int x2, int y2, int color, boolean filled, int outlineWidth) {
@@ -271,7 +304,9 @@ public class Main {
             float functionRelativeY = round(function.f(relativeX, args));
             float functionRelativeNextY = round(function.f(relativeNextX, args));
 
-            drawLine2(zeroX + x, zeroY - Math.round(functionRelativeY * singleSection), zeroX + nextX, zeroY - Math.round(functionRelativeNextY * singleSection), color);
+            drawLine3(zeroX + x, zeroY - Math.round(functionRelativeY * singleSection), zeroX + nextX, zeroY - Math.round(functionRelativeNextY * singleSection), color);
+
+//            drawPoint(zeroX + x, zeroY - Math.round(functionRelativeY * singleSection), -1);
         }
     }
 
