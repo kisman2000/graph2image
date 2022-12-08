@@ -17,7 +17,7 @@ public class FontRenderer {
 
     public static final int CHAR_SIZE = 8;
     private static final int CHAR_OFFSET = 1;
-    private static final int CHAR_MAX_WIDTH = 5;//точное только для цифр и букв да пон
+    private static final int CHAR_MAX_WIDTH = 5;//точное только для цифр и ПОЧТИ ВСЕХ букв да пон
     private static final char[][] CHARS_MAP = new char[][] {
             { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
             { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
