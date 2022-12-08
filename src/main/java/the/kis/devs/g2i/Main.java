@@ -156,6 +156,9 @@ public class Main {
             {
                 int axisLength = width - axisOffset * 2 - axisWidth;
 
+                drawRect(axisOffset + 1, height - axisOffset - 1, width - axisOffset, height - axisOffset - axisWidth/* + 1*/, Color.BLACK.getRGB(), true, 1);
+
+
                 for (
                         int i = 0;
                         i <= axisLength;
@@ -164,7 +167,7 @@ public class Main {
                     int section = i * singleSection;
                     int x = axisOffset + axisWidth + section;
 
-                    drawString(String.valueOf(i), x - FontRenderer.getWidth(String.valueOf(i)) / 2, height - axisOffset + 1 - (i % 2 == 0 ? 0 : /*-1 + */axisWidth + FontRenderer.CHAR_SIZE), Color.BLACK.getRGB(), false);
+                    drawString(String.valueOf(i), x - FontRenderer.getWidth(String.valueOf(i)) / 2, height - axisOffset + 1 - (i % 2 == 0 ? 0 : /*-1 + */axisWidth + FontRenderer.CHAR_SIZE + 1), Color.BLACK.getRGB(), false);
                     drawLine2(x, height - axisOffset - axisWidth - 1, x, height - axisOffset, Color.BLACK.getRGB());
                 }
             }
@@ -172,6 +175,8 @@ public class Main {
             //Y axis
             {
                 int axisLength = height - axisOffset * 2 - axisWidth;
+
+                drawRect(axisOffset + 1, height - axisOffset - 1, axisOffset + axisWidth, axisOffset + axisWidth, Color.BLACK.getRGB(), true, 1);
 
                 for (
                         int i = 0;
@@ -182,7 +187,7 @@ public class Main {
                     int y = height - axisOffset - axisWidth - section;//axisOffset + axisWidth + section;
 
                     drawString(String.valueOf(i), axisOffset + (i % 2 == 0 ? -FontRenderer.getWidth(String.valueOf(i)) : axisWidth + FontRenderer.getWidth(String.valueOf(i)) + 1) - 1, y - FontRenderer.CHAR_SIZE / 2, Color.BLACK.getRGB(), false);
-                    drawLine2(axisOffset - 1, y, axisOffset + axisWidth + 1, y, Color.BLACK.getRGB());
+                    drawLine2(axisOffset, y, axisOffset + axisWidth + 1, y, Color.BLACK.getRGB());
                 }
             }
         }
@@ -226,6 +231,10 @@ public class Main {
 
     public static void drawLine3(int x1, int y1, int x2, int y2, int color) {
         line3(x1, y1, x2, y2).forEach(point -> points.put(point, color));
+    }
+
+    public static void drawRectWH(int x, int y, int w, int h, int color, boolean filled, int outlineWidth) {
+        drawRect(x, y, x + w, y + h, color, filled, outlineWidth);
     }
 
     public static void drawRect(int x1, int y1, int x2, int y2, int color, boolean filled, int outlineWidth) {
@@ -333,20 +342,6 @@ public class Main {
                     y < height;
                     y++
             ) {
-                {
-                    if(x > axisOffset && x < axisOffset + axisWidth && y > axisOffset && y < height - axisOffset) {
-                        image.setRGB(x, y, Color.BLACK.getRGB());
-                        continue;
-                    }
-                }
-
-                {
-                    if(x > axisOffset && x < width - axisOffset && y > height - axisOffset - axisWidth && y < height - axisOffset) {
-                        image.setRGB(x, y, Color.BLACK.getRGB());
-                        continue;
-                    }
-                }
-
                 {
                     if(points.containsKey(new Pair<>(x, y))) {
                         image.setRGB(x, y, points.get(new Pair<>(x, y)));
