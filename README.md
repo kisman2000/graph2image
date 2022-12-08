@@ -14,5 +14,6 @@ shitty *api* for working with images in java
  - rotation system
  - negative numbers
  - finish line3
+ - fix drawGraph(with line3 implementation)
  - rewrote structure of code
  - cool readme
