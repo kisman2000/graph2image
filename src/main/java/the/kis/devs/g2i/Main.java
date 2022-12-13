@@ -13,14 +13,6 @@ import java.util.HashMap;
  * @since 22:10 of 17.11.2022
  */
 public class Main {
-    private static float round(float value) {
-        return Float.parseFloat(String.format("%.1f", value));
-    }
-    
-    private static float pow(float n, float coeff) {
-        return (float) Math.pow(n, coeff);
-    }
-                     
     private static boolean canBackground(int x, int y, BufferedImage background) {
         return x <= background.getWidth() && y <= background.getHeight();
     }
@@ -93,13 +85,13 @@ public class Main {
 
             float functionY = Functions.Linear.f(functionX, args);
 
-            int x3 = Math.round(round(functionX)) + (x1 - x2);
+            int x3 = Math.round(MathHelper.round(functionX)) + (x1 - x2);
             int x = x3 < x1 ? x3 + Math.abs(x1 - x2) * 2 : x3;
 
             //TODO: i will need it to fix one little bug
 //            System.out.println(functionX + "(" + (x) + ")" + " | " + functionY + "(" + (y1 - y2 > 0 ? -1 : 1) * (/*zeroY - */(/*height -*//*axisOffset + axisWidth + */Math.round(round(functionY)))) + ")");
 
-            positions.add(new Pair<>(x, (y1 - y2 > 0 ? -1 : 1) * -Math.round(round(functionY))));
+            positions.add(new Pair<>(x, (y1 - y2 > 0 ? -1 : 1) * -Math.round(MathHelper.round(functionY))));
 
         }
 
@@ -272,11 +264,11 @@ public class Main {
             nextX++;
 
 
-            float relativeX = round(x) / singleSection;
-            float relativeNextX = round(nextX) / singleSection;
+            float relativeX = MathHelper.round(x) / singleSection;
+            float relativeNextX = MathHelper.round(nextX) / singleSection;
 
-            float functionRelativeY = round(function.f(relativeX, args));
-            float functionRelativeNextY = round(function.f(relativeNextX, args));
+            float functionRelativeY = MathHelper.round(function.f(relativeX, args));
+            float functionRelativeNextY = MathHelper.round(function.f(relativeNextX, args));
 
             drawLine3(zeroX + x, zeroY - Math.round(functionRelativeY * singleSection), zeroX + nextX, zeroY - Math.round(functionRelativeNextY * singleSection), color);
 
