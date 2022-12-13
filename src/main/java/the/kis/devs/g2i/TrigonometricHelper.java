@@ -14,7 +14,7 @@ public class TrigonometricHelper {
         boolean negativeX = pointX < 0;
         boolean negativeY = pointY < 0;
 
-        double extraDegrees = pointY != 0 ? toDegrees(relativePointX == 0 ? Math.acos(relativePointX) : Math.asin(relativePointY))/*toDegrees(Math.acos(*//*1.0 / *//*relativePointX))*/ : 0.0;
+        double extraDegrees = pointY != 0 ? toDegrees(relativePointX == 0 ? Math.acos(relativePointX) : Math.asin(relativePointY)) : 0.0;
 
         double rotatedX = Math.cos(toRadians(degrees + extraDegrees)) * scaleCoeff;
         double rotatedY = Math.sin(toRadians(degrees + extraDegrees)) * scaleCoeff;
