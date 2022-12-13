@@ -9,6 +9,7 @@ shitty *api* for working with images in java
  - draw points!!!
  - draw graphs(by points)
  - draw strings(our font renderer supports russian letters too)
+ - rotate any drawable thing(wip, uses trigonometry)
 
 ## TODO:
  - rotation system
