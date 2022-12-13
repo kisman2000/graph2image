@@ -52,4 +52,13 @@ public class TrigonometricHelperTest {
 
         System.out.println("Rotating point(" + 2 + ";" + 0 + ") to " + degrees + " degrees, non relative x is " + point[0] + " and non relative y is " + point[1]);
     }
+
+    @Test
+    public void rotatorTest5() {
+        int degrees = -135;
+
+        double[] point = TrigonometricHelper.rotatePointDeg(1, 0, 0, 0, degrees, true, true);
+
+        System.out.println("Rotating point(" + 1 + ";" + 0 + ") to " + degrees + " degrees, x is " + point[0] + " and y is " + point[1]);
+    }
 }
