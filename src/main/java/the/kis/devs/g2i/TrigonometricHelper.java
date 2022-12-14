@@ -5,16 +5,24 @@ package the.kis.devs.g2i;
  * @since 19:32 of 08.12.2022
  */
 public class TrigonometricHelper {
+    /**
+     * int coeff = pointX / Math.abs(pointX
+     * <p>
+     * if pointX is negative, coeff will be -1
+     * <p>
+     * if pointX is positive, coeff will be 1
+     */
     public static double[] rotatePointDeg(int pointX, int pointY, int zeroX, int zeroY, double degrees, boolean round, boolean relative) {
         int relativePointX = Math.abs(pointX - zeroX);
         int relativePointY = Math.abs(pointY - zeroY);
 
-        int scaleCoeff = Math.max(relativePointX, relativePointY);
+        double scaleCoeff = Math.max(relativePointX, relativePointY);
+        double scaleCoeffRaw = Math.max(pointX, pointY);
 
-        boolean negativeX = pointX < 0;
-        boolean negativeY = pointY < 0;
+        relativePointX *= (scaleCoeffRaw == 0 ? -1 : 1);
+        relativePointY *= (scaleCoeffRaw == 0 ? -1 : 1);
 
-        double extraDegrees = pointY != 0 ? toDegrees(relativePointX == 0 ? Math.acos(relativePointX) : Math.asin(relativePointY)) : 0.0;
+        double extraDegrees = pointX != 0 || pointY != 0 ? toDegrees(relativePointX != 0 ? Math.acos(relativePointX / scaleCoeff) : Math.asin(relativePointY / scaleCoeff)) : 0.0;
 
         double rotatedX = Math.cos(toRadians(degrees + extraDegrees)) * scaleCoeff;
         double rotatedY = Math.sin(toRadians(degrees + extraDegrees)) * scaleCoeff;
@@ -22,14 +30,6 @@ public class TrigonometricHelper {
         if(round) {
             rotatedX = MathHelper.round(rotatedX);
             rotatedY = MathHelper.round(rotatedY);
-        }
-
-        if(negativeX) {
-            rotatedX = -rotatedX;
-        }
-
-        if(negativeY) {
-            rotatedY = -rotatedY;
         }
 
         if(!relative) {
