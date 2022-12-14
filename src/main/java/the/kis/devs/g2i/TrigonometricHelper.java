@@ -17,17 +17,12 @@ public class TrigonometricHelper {
 
         double extraDegrees = pointX != 0 || pointY != 0 ? toDegrees(relativePointX != 0 ? Math.acos(relativePointX / scaleCoeff) : Math.asin(relativePointY / scaleCoeff)) : 0.0;
 
-        double rotatedX = Math.cos(toRadians(degrees + extraDegrees)) * scaleCoeff;
-        double rotatedY = Math.sin(toRadians(degrees + extraDegrees)) * scaleCoeff;
+        double rotatedX = Math.cos(toRadians(degrees + extraDegrees)) * scaleCoeff + (relative ? 0 : zeroX);
+        double rotatedY = Math.sin(toRadians(degrees + extraDegrees)) * scaleCoeff + (relative ? 0 : zeroY);
 
         if(round) {
             rotatedX = MathHelper.round(rotatedX);
             rotatedY = MathHelper.round(rotatedY);
-        }
-
-        if(!relative) {
-            rotatedX += zeroX;
-            rotatedY += zeroY;
         }
 
         return new double[] { rotatedX, rotatedY };
