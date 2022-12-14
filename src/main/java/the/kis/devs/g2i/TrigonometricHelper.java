@@ -5,13 +5,6 @@ package the.kis.devs.g2i;
  * @since 19:32 of 08.12.2022
  */
 public class TrigonometricHelper {
-    /**
-     * int coeff = pointX / Math.abs(pointX
-     * <p>
-     * if pointX is negative, coeff will be -1
-     * <p>
-     * if pointX is positive, coeff will be 1
-     */
     public static double[] rotatePointDeg(int pointX, int pointY, int zeroX, int zeroY, double degrees, boolean round, boolean relative) {
         int relativePointX = Math.abs(pointX - zeroX);
         int relativePointY = Math.abs(pointY - zeroY);
