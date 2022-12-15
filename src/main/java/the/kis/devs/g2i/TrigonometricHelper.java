@@ -1,10 +1,17 @@
 package the.kis.devs.g2i;
 
+import java.util.HashMap;
+
 /**
  * @author _kisman_
  * @since 19:32 of 08.12.2022
  */
 public class TrigonometricHelper {
+    public static HashMap<Double, Double> sinCache = new HashMap<>();
+    public static HashMap<Double, Double> cosCache = new HashMap<>();
+    public static HashMap<Double, Double> asinCache = new HashMap<>();
+    public static HashMap<Double, Double> acosCache = new HashMap<>();
+
     public static double[] rotatePointDeg(int pointX, int pointY, int zeroX, int zeroY, double degrees, boolean round, boolean relative) {
         int relativePointX = Math.abs(pointX - zeroX);
         int relativePointY = Math.abs(pointY - zeroY);
@@ -15,10 +22,10 @@ public class TrigonometricHelper {
         relativePointX *= (scaleCoeffRaw == 0 ? -1 : 1);
         relativePointY *= (scaleCoeffRaw == 0 ? -1 : 1);
 
-        double extraDegrees = pointX != 0 || pointY != 0 ? toDegrees(relativePointX != 0 ? Math.acos(relativePointX / scaleCoeff) : Math.asin(relativePointY / scaleCoeff)) : 0.0;
+        double extraDegrees = pointX != 0 || pointY != 0 ? toDegrees(relativePointX != 0 ? acos(relativePointX / scaleCoeff) : asin(relativePointY / scaleCoeff)) : 0.0;
 
-        double rotatedX = Math.cos(toRadians(degrees + extraDegrees)) * scaleCoeff + (relative ? 0 : zeroX);
-        double rotatedY = Math.sin(toRadians(degrees + extraDegrees)) * scaleCoeff + (relative ? 0 : zeroY);
+        double rotatedX = cos(toRadians(degrees + extraDegrees)) * scaleCoeff + (relative ? 0 : zeroX);
+        double rotatedY = sin(toRadians(degrees + extraDegrees)) * scaleCoeff + (relative ? 0 : zeroY);
 
         if(round) {
             rotatedX = MathHelper.round(rotatedX);
@@ -29,6 +36,54 @@ public class TrigonometricHelper {
     }
 
     //TODO: rotatePointRad method
+
+    public static double sin(double radians) {
+        if(sinCache.containsKey(radians)) {
+            return sinCache.get(radians);
+        }
+
+        double sin = Math.sin(radians);
+
+        sinCache.put(radians, sin);
+
+        return sin;
+    }
+
+    public static double cos(double radians) {
+        if(cosCache.containsKey(radians)) {
+            return cosCache.get(radians);
+        }
+
+        double cos = Math.cos(radians);
+
+        cosCache.put(radians, cos);
+
+        return cos;
+    }
+
+    public static double asin(double sin) {
+        if(asinCache.containsKey(sin)) {
+            return asinCache.get(sin);
+        }
+
+        double asin = Math.asin(sin);
+
+        asinCache.put(sin, asin);
+
+        return asin;
+    }
+
+    public static double acos(double cos) {
+        if(acosCache.containsKey(cos)) {
+            return acosCache.get(cos);
+        }
+
+        double acos = Math.acos(cos);
+
+        acosCache.put(cos, acos);
+
+        return acos;
+    }
 
     /*public static double arcsin(double sin, int iterations) {
         double arcsin = 0;
