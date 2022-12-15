@@ -107,6 +107,12 @@ public class Main {
     public static int width;
     public static int height;
 
+    public static void put(Pair<Integer, Integer> pos, int color) {
+        if(KismanGL.onAddPoint(pos.a, pos.b, color)) {
+            points.put(pos, color);
+        }
+    }
+
     public static void render() {
         drawString("QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm\nЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮйцукенгшщзхъфывапролджэячсмитьбю", 50, 15, -1, true);
 
@@ -139,6 +145,34 @@ public class Main {
 
         drawLine2(30, 30, 60, 70, Color.CYAN.getRGB());
         drawLine2(30, 100, 200, 100, Color.CYAN.getRGB());
+
+        drawRectWH(150, 150, 10, 10, Color.BLACK.getRGB(), true, 1);
+
+        {
+            KismanGL.pushMatrix();
+
+
+            drawRectWH(150, 150, 10, 10, Color.WHITE.getRGB(), true, 1);
+
+            KismanGL.rotateDeg(90, 150, 150);
+
+
+            KismanGL.popMatrix();
+        }
+
+        /*drawRectWH(170, 150, 10, 3, Color.BLACK.getRGB(), true, 1);
+
+        {
+            KismanGL.pushMatrix();
+
+
+            drawRectWH(170, 150, 10, 3, Color.WHITE.getRGB(), true, 1);
+
+            KismanGL.rotateDeg(45, 170, 150);
+
+
+            KismanGL.popMatrix();
+        }*/
 
         //Buffering sections of axis
         {
@@ -203,7 +237,7 @@ public class Main {
     }
 
     public static void drawPoint(int x, int y, int color) {
-        points.put(new Pair<>(x, y), color);
+        put(new Pair<>(x, y), color);
     }
     
     public static void drawString(String string, int x, int y, int color, boolean shadow) {
@@ -213,16 +247,16 @@ public class Main {
             point.a = point.a + x;
             point.b = point.b + y;
 
-            points.put(point, color);
+            put(point, color);
         });
     }
 
     public static void drawLine2(int x1, int y1, int x2, int y2, int color) {
-        line2(x1, y1, x2, y2, true).forEach(point -> points.put(point, color));
+        line2(x1, y1, x2, y2, true).forEach(point -> put(point, color));
     }
 
     public static void drawLine3(int x1, int y1, int x2, int y2, int color) {
-        line3(x1, y1, x2, y2).forEach(point -> points.put(point, color));
+        line3(x1, y1, x2, y2).forEach(point -> put(point, color));
     }
 
     public static void drawRectWH(int x, int y, int w, int h, int color, boolean filled, int outlineWidth) {
@@ -249,7 +283,7 @@ public class Main {
                 int relativeReversedY = Math.max(y1, y2) - y;
 
                 if(filled || ((relativeX <= outlineWidth || relativeReversedX <= outlineWidth) || (relativeY <= outlineWidth || relativeReversedY <= outlineWidth))) {
-                    points.put(pair, color);
+                    put(pair, color);
                 }
             }
         }

@@ -17,12 +17,16 @@ public class TrigonometricHelper {
         int relativePointY = Math.abs(pointY - zeroY);
 
         double scaleCoeff = Math.max(relativePointX, relativePointY);
-        double scaleCoeffRaw = Math.max(pointX, pointY);
+        double scaleCoeffRaw = Math.max(pointX - zeroX, pointY - zeroX);
 
-        relativePointX *= (scaleCoeffRaw == 0 ? -1 : 1);
-        relativePointY *= (scaleCoeffRaw == 0 ? -1 : 1);
+        relativePointX *= (scaleCoeffRaw <= 0 ? -1 : 1);
+        relativePointY *= (scaleCoeffRaw <= 0 ? -1 : 1);
 
-        double extraDegrees = pointX != 0 || pointY != 0 ? toDegrees(relativePointX != 0 ? acos(relativePointX / scaleCoeff) : asin(relativePointY / scaleCoeff)) : 0.0;
+//        double extraDegrees = toDegrees(Math.max(asin(relativePointY / scaleCoeff), acos(relativePointX / scaleCoeff)));
+        double extraDegrees = Math.max(toDegrees(asin(relativePointY / scaleCoeff)), toDegrees(acos(relativePointX / scaleCoeff)));
+//        double extraDegrees = toDegrees(acos(cos(relativePointX, Math.sqrt(relativePointX * relativePointX + relativePointY * relativePointY), relativePointY)));
+
+        System.out.println(extraDegrees + " " + scaleCoeff + " | " + asin(relativePointY / scaleCoeff) + " " + acos(relativePointX / scaleCoeff) + " | " + relativePointX);
 
         double rotatedX = cos(toRadians(degrees + extraDegrees)) * scaleCoeff + (relative ? 0 : zeroX);
         double rotatedY = sin(toRadians(degrees + extraDegrees)) * scaleCoeff + (relative ? 0 : zeroY);
@@ -59,6 +63,10 @@ public class TrigonometricHelper {
         cosCache.put(radians, cos);
 
         return cos;
+    }
+
+    public static double cos(double a, double b, double c) {
+        return (a * a + c * c - b * b) / 2 * a * c;
     }
 
     public static double asin(double sin) {

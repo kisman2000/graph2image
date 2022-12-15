@@ -61,4 +61,13 @@ public class TrigonometricHelperTest {
 
         System.out.println("Rotating point(" + -1 + ";" + 0 + ") to " + degrees + " degrees, x is " + point[0] + " and y is " + point[1]);
     }
+
+    @Test
+    public void rotatorTest6() {
+        int degrees = 90;
+
+        double[] point = TrigonometricHelper.rotatePointDeg(10, 10, 0, 0, degrees, true, false);
+
+        System.out.println("Rotating point(" + 10 + ";" + 10 + ") to " + degrees + " degrees, x is " + point[0] + " and y is " + point[1]);
+    }
 }
