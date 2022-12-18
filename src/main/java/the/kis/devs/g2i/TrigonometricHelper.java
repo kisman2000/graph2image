@@ -22,7 +22,7 @@ public class TrigonometricHelper {
         relativePointX *= (scaleCoeffRaw <= 0 ? -1 : 1);
         relativePointY *= (scaleCoeffRaw <= 0 ? -1 : 1);
 
-        double extraDegrees = relativePointX < 0 && relativePointY == 0 ? 180 : (relativePointX == 0 && relativePointY != 0 ? (relativePointY > 0 ? 90 : 270) : toDegrees(Math.atan(Math.abs(relativePointY / relativePointX))));
+        double extraDegrees = relativePointX == 0 && relativePointY == 0 ? 0 : (relativePointX < 0 && relativePointY == 0 ? 180 : (relativePointX == 0 && relativePointY != 0 ? (relativePointY > 0 ? 90 : 270) : toDegrees(Math.atan(Math.abs(relativePointY / relativePointX)))));
 
         double rotatedX = cos(toRadians(degrees + extraDegrees)) * scaleCoeff + (relative ? 0 : zeroX);
         double rotatedY = sin(toRadians(degrees + extraDegrees)) * scaleCoeff + (relative ? 0 : zeroY);
