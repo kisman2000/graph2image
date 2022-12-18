@@ -23,8 +23,25 @@ public class TrigonometricHelper {
         relativePointY *= (scaleCoeffRaw <= 0 ? -1 : 1);
 
 //        double extraDegrees = toDegrees(Math.max(asin(relativePointY / scaleCoeff), acos(relativePointX / scaleCoeff)));
-        double extraDegrees = Math.max(toDegrees(asin(relativePointY / scaleCoeff)), toDegrees(acos(relativePointX / scaleCoeff)));
+//        double extraDegrees = Math.max(toDegrees(asin(relativePointY / scaleCoeff)), toDegrees(acos(relativePointX / scaleCoeff)));
 //        double extraDegrees = toDegrees(acos(cos(relativePointX, Math.sqrt(relativePointX * relativePointX + relativePointY * relativePointY), relativePointY)));
+        double extraDegrees = 0;
+
+        if(relativePointX < 0 && relativePointY == 0) {
+            extraDegrees = 180;
+        }
+
+        if(relativePointX == 0) {
+            if(relativePointY > 0) {
+                extraDegrees = 90;
+            } else if(relativePointY < 0) {
+                extraDegrees = 270;
+            }
+        }
+
+        if(extraDegrees == 0) {
+            extraDegrees = toDegrees(Math.atan(Math.abs(relativePointY / relativePointX)));
+        }
 
         System.out.println(extraDegrees + " " + scaleCoeff + " | " + asin(relativePointY / scaleCoeff) + " " + acos(relativePointX / scaleCoeff) + " | " + relativePointX);
 
