@@ -57,24 +57,26 @@ public class KismanGL {
         System.out.println(averageX + " " + averageY);
 
         for(Map.Entry<Pair<Integer, Integer>, Integer> entry : cache.entrySet()) {
-//            int coeff = entry.getKey().a - averageX <= 0 ? -1 : 1;
+            int coeff = entry.getKey().a - averageX <= 0 ? -1 : 1;
 
-//            double[] rotatedPoint = TrigonometricHelper.rotatePointDeg(entry.getKey().a, entry.getKey().b, zeroX, zeroY, /*360 - */degrees/* * coeff*/, false, false);
+            double[] rotatedPoint = TrigonometricHelper.rotatePointDeg(entry.getKey().a, entry.getKey().b, zeroX, zeroY, /*360 - */degrees/* * coeff*/, false, false);
 
-//            int pointX = (int) rotatedPoint[0];
-//            int pointY = (int) rotatedPoint[1];
+            /*int pointX = (int) rotatedPoint[0];
+            int pointY = (int) rotatedPoint[1];*/
+            int pointX = (int) Math.round(rotatedPoint[0]);
+            int pointY = (int) Math.round(rotatedPoint[1]);
 
-            int relativeX = entry.getKey().a - zeroX;
+            /*int relativeX = entry.getKey().a - zeroX;
             int relativeY = entry.getKey().b - zeroY;
 
             System.out.println(relativeX + " " + relativeY);
 
-            double[] rotatedPoint = TrigonometricHelper.rotatePointDeg(relativeX, relativeY, 0, 0, /*360 - */degrees/* * coeff*/, true, true);
+            double[] rotatedPoint = TrigonometricHelper.rotatePointDeg(relativeX, relativeY, 0, 0, *//*360 - *//*degrees*//* * coeff*//*, true, true);*/
 
-            int pointX = (int) Math.round(rotatedPoint[0]) + zeroX;
-            int pointY = (int) Math.round(rotatedPoint[1]) + zeroY;
+//            int pointX = (int) Math.round(rotatedPoint[0]) + zeroX;
+//            int pointY = (int) Math.round(rotatedPoint[1]) + zeroY;
 
-//            System.out.println("> " + relativeX + " " + relativeY + " | " + pointX + " " + pointY + " | " + Math.round(rotatedPoint[0]) + " " + rotatedPoint[1]);
+            System.out.println("> " + entry.getKey().a + " " + entry.getKey().b + " | " + pointX + " " + pointY + " | " + Math.round(rotatedPoint[0]) + " " + rotatedPoint[1]);
 
             cacheNew.put(new Pair<>(pointX, pointY), entry.getValue());
         }

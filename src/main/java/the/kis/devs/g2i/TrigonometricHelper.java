@@ -12,6 +12,10 @@ public class TrigonometricHelper {
     public static HashMap<Double, Double> asinCache = new HashMap<>();
     public static HashMap<Double, Double> acosCache = new HashMap<>();
 
+    public static double[] rotatePointDeg(int x, int y, double degrees, boolean round) {
+        return rotatePointDeg(x, y, 0, 0, degrees, round, true);
+    }
+
     public static double[] rotatePointDeg(int pointX, int pointY, int zeroX, int zeroY, double degrees, boolean round, boolean relative) {
         int relativePointX = Math.abs(pointX - zeroX);
         int relativePointY = Math.abs(pointY - zeroY);
